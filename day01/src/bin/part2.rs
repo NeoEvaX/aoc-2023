@@ -5,27 +5,30 @@ fn main() {
 }
 
 fn part2(input: &str) -> u32 {
-    let lines = input.lines();
+    input
+        .lines()
+        .map(|line| {
+            let mut line = line.to_string();
+            line = line
+                .replace("one", "one1one")
+                .replace("two", "two2two")
+                .replace("three", "three3three")
+                .replace("four", "four4four")
+                .replace("five", "five5five")
+                .replace("six", "six6six")
+                .replace("seven", "seven7seven")
+                .replace("eight", "eight8eight")
+                .replace("nine", "nine9nine");
+            let mut digits = line.chars().filter_map(|character| character.to_digit(10));
 
-    let mut total_calibration = 0;
+            let first_digit = digits.next().expect("should be a number");
 
-    for line in lines {
-        let mut line = line.to_string();
-        line = line.replace("one", "one1one");
-        line = line.replace("two", "two2two");
-        line = line.replace("three", "three3three");
-        line = line.replace("four", "four4four");
-        line = line.replace("five", "five5five");
-        line = line.replace("six", "six6six");
-        line = line.replace("seven", "seven7seven");
-        line = line.replace("eight", "eight8eight");
-        line = line.replace("nine", "nine9nine");
-        let digits: Vec<u32> = line.chars().filter_map(|c| c.to_digit(10)).collect();
-        let calibration = digits[0] * 10 + digits.last().unwrap();
-        total_calibration += calibration;
-    }
-
-    total_calibration
+            match digits.last() {
+                Some(num) => first_digit * 10 + num,
+                None => first_digit * 10 + first_digit,
+            }
+        })
+        .sum()
 }
 
 #[cfg(test)]

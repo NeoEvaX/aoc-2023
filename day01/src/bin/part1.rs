@@ -5,16 +5,19 @@ fn main() {
 }
 
 fn part1(input: &str) -> u32 {
-    let lines = input.lines();
+    input
+        .lines()
+        .map(|line| {
+            let mut digits = line.chars().filter_map(|character| character.to_digit(10));
 
-    let mut total_calibration = 0;
-    for line in lines {
-        let digits: Vec<u32> = line.chars().filter_map(|c| c.to_digit(10)).collect();
-        let calibration = digits[0] * 10 + digits.last().unwrap();
-        total_calibration += calibration;
-    }
+            let first_digit = digits.next().expect("should be a number");
 
-    total_calibration
+            match digits.last() {
+                Some(num) => first_digit * 10 + num,
+                None => first_digit * 10 + first_digit,
+            }
+        })
+        .sum()
 }
 
 #[cfg(test)]
